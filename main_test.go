@@ -13,7 +13,7 @@ const (
 )
 
 func TestRun(t *testing.T) {
-	if err := run(inputFile); err != nil {
+	if err := run(inputFile, true); err != nil {
 		t.Error(err)
 	}
 
@@ -56,7 +56,7 @@ func TestConvertToHTML(t *testing.T) {
 
 func BenchmarkRun(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		run(inputFile)
+		run(inputFile, true)
 	}
 }
 

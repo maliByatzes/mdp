@@ -15,7 +15,9 @@ import (
 
 func main() {
 	var fileName string
+  var skipPreview bool
 	flag.StringVar(&fileName, "file", "", "Markdown file to preview")
+  flag.BoolVar(&skipPreview, "skip", false, "Skip the auto-preview")
 	flag.Parse()
 
 	if fileName == "" {
@@ -23,12 +25,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := run(fileName); err != nil {
+	if err := run(fileName, skipPreview); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run(fileName string) error {
+func run(fileName string, skipPreview bool) error {
 	fileContent, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
@@ -47,6 +49,10 @@ func run(fileName string) error {
 	if err := saveToHTMLFile(outName, htmlContent); err != nil {
 		return err
 	}
+
+  if skipPreview {
+    return nil
+  }
 
 	defer os.Remove(outName)
 
