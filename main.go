@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -35,7 +34,7 @@ func run(fileName string) error {
 	htmlContent := convertToHTML(fileContent)
 
 	outName := filepath.Base(fileName) + ".html"
-	fmt.Println(outName)
+	// fmt.Println(outName)
 
 	return saveToHTMLFile(outName, htmlContent)
 }
