@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday/v2"
 )
 
 func main() {
@@ -17,10 +20,29 @@ func main() {
 		os.Exit(1)
 	}
 
-	fileContent, err := os.ReadFile(fileName)
-	if err != nil {
+	if err := run(fileName); err != nil {
 		log.Fatal(err)
 	}
+}
 
-	fmt.Println(string(fileContent))
+func run(fileName string) error {
+	fileContent, err := os.ReadFile(fileName)
+	if err != nil {
+		return err
+	}
+
+	htmlContent := convertToHTML(fileContent)
+
+	fmt.Println(string(htmlContent))
+
+	// save htmlContent to some file
+
+	return nil
+}
+
+func convertToHTML(content []byte) []byte {
+	output := blackfriday.Run(content)
+	htmlContent := bluemonday.UGCPolicy().SanitizeBytes(output)
+
+	return htmlContent
 }
