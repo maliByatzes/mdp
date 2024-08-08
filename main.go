@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
@@ -33,11 +34,10 @@ func run(fileName string) error {
 
 	htmlContent := convertToHTML(fileContent)
 
-	fmt.Println(string(htmlContent))
+	outName := filepath.Base(fileName) + ".html"
+	fmt.Println(outName)
 
-	// save htmlContent to some file
-
-	return nil
+	return saveToHTMLFile(outName, htmlContent)
 }
 
 func convertToHTML(content []byte) []byte {
@@ -45,4 +45,8 @@ func convertToHTML(content []byte) []byte {
 	htmlContent := bluemonday.UGCPolicy().SanitizeBytes(output)
 
 	return htmlContent
+}
+
+func saveToHTMLFile(outName string, content []byte) error {
+	return os.WriteFile(outName, content, 0644)
 }
